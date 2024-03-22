@@ -21,6 +21,7 @@ jobs:
           additions="${{ env.ADDITIONS }}"
           changed_files="${{ env.CHANGED_FILES }}"
           for file in $changed_files; do
+            echo $file
             if [ $(echo $file | grep '/' | wc -l) -eq 1 ]; then
               dirname=$(dirname $file)
               if ! echo "$additions" | grep -q "^$dirname\$"; then
