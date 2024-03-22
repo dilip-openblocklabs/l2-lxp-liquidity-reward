@@ -14,5 +14,11 @@ jobs:
 
       - name: Print Pull Request Changes
         run: |
-          jq '.' $GITHUB_EVENT_PATH
+          echo "Added files:"
+          jq -r '.pull_request.additions | .[]' $GITHUB_EVENT_PATH
 
+          echo "Modified files:"
+          jq -r '.pull_request.changed_files | .[]' $GITHUB_EVENT_PATH
+
+          echo "Removed files:"
+          jq -r '.pull_request.deletions | .[]' $GITHUB_EVENT_PATH
