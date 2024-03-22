@@ -11,6 +11,11 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Get PR details
+        id: hello
+        run: |
+          echo "Hello World"
+
+      - name: Get PR details
         id: pr
         run: |
           echo "::set-output name=files::$(jq -r '.pull_request.additions, .pull_request.changed_files' $GITHUB_EVENT_PATH)"
@@ -27,4 +32,9 @@ jobs:
               fi
             fi
           done
+
+      - name: Get PR details
+        id: end
+        run: |
+          echo "Hello World"
   
