@@ -1,22 +1,17 @@
-name: Test-PRs
+name: Print Pull Request Changes
+
 on:
   pull_request:
     paths:
-      - '**/' 
+      - '**/'  # Listen for changes in any directory
+
 jobs:
-  print_new_folder_name:
+  print_pull_request_changes:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Extract new folder names
+      - name: Print Pull Request Changes
         run: |
-          changed_files=$(jq -r '.pull_request.changed_files' $GITHUB_EVENT_PATH)
-          for file in $changed_files; do
-            if [[ $file =~ ^(.+)/[^/]+$ ]]; then
-              dirname=${BASH_REMATCH[1]}
-              echo "New folder added: $dirname"
-            fi
-          done
-  
+          jq '.' $GITHUB_EVENT_PATH
