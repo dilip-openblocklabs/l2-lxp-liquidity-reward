@@ -12,12 +12,14 @@ jobs:
 
       - name: Get PR details
         id: pr
-        run: echo "::set-output name=files::$(jq -r '.pull_request | .additions, .changed_files' $GITHUB_EVENT_PATH)"
+        run: |
+          echo "::set-env name=ADDITIONS::$(jq -r '.pull_request.additions' $GITHUB_EVENT_PATH)"
+          echo "::set-env name=CHANGED_FILES::$(jq -r '.pull_request.changed_files' $GITHUB_EVENT_PATH)"
 
       - name: Extract new folder names
         run: |
-          additions=$(echo "${{ steps.pr.outputs.files }}" | head -n1)
-          changed_files=$(echo "${{ steps.pr.outputs.files }}" | tail -n1)
+          additions="${{ env.ADDITIONS }}"
+          changed_files="${{ env.CHANGED_FILES }}"
           for file in $changed_files; do
             if [ $(echo $file | grep '/' | wc -l) -eq 1 ]; then
               dirname=$(dirname $file)
