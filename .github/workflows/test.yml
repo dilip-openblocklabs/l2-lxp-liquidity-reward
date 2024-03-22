@@ -11,16 +11,25 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
+        
       - name: Print Pull Request Changes
         run: |
           pull_request_payload=$(cat $GITHUB_EVENT_PATH)
+          
+          added_files=$(echo $pull_request_payload | jq -r '.pull_request.additions')
+          if [[ ! -z "$added_files" && "$added_files" != "null" ]]; then
+            echo "Added files:"
+            echo $added_files
+          fi
 
-          echo "Added files:"
-          echo $pull_request_payload | jq -r '.pull_request.files[] | select(.status == "added") | .filename'
+          changed_files=$(echo $pull_request_payload | jq -r '.pull_request.changed_files')
+          if [[ ! -z "$changed_files" && "$changed_files" != "null" ]]; then
+            echo "Modified files:"
+            echo $changed_files
+          fi
 
-          echo "Modified files:"
-          echo $pull_request_payload | jq -r '.pull_request.files[] | select(.status == "modified") | .filename'
-
-          echo "Removed files:"
-          echo $pull_request_payload | jq -r '.pull_request.files[] | select(.status == "removed") | .filename'
+          removed_files=$(echo $pull_request_payload | jq -r '.pull_request.deletions')
+          if [[ ! -z "$removed_files" && "$removed_files" != "null" ]]; then
+            echo "Removed files:"
+            echo $removed_files
+          fi
