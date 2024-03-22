@@ -13,8 +13,8 @@ jobs:
       - name: Get PR details
         id: pr
         run: |
-          echo "::set-env name=ADDITIONS::$(jq -r '.pull_request.additions' $GITHUB_EVENT_PATH)"
-          echo "::set-env name=CHANGED_FILES::$(jq -r '.pull_request.changed_files' $GITHUB_EVENT_PATH)"
+          echo "ADDITIONS=$(jq -r '.pull_request.additions' $GITHUB_EVENT_PATH)" >> $GITHUB_ENV
+          echo "CHANGED_FILES=$(jq -r '.pull_request.changed_files' $GITHUB_EVENT_PATH)" >> $GITHUB_ENV
 
       - name: Extract new folder names
         run: |
