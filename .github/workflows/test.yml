@@ -25,6 +25,8 @@ jobs:
               dirname=$(dirname $file)
               if ! echo "$additions" | grep -q "^$dirname\$"; then
                 echo "New folder added: $dirname"
+              else 
+                echo "Folder already added: $dirname"
               fi
             fi
           done
