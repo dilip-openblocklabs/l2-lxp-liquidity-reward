@@ -11,19 +11,15 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Get PR details
-        id: hello
-        run: |
-          echo "Hello World"
-
-      - name: Get PR details
         id: pr
         run: |
-          echo "::set-output name=files::$(jq -r '.pull_request.additions, .pull_request.changed_files' $GITHUB_EVENT_PATH)"
+          echo "::set-env name=ADDITIONS::$(jq -r '.pull_request.additions' $GITHUB_EVENT_PATH)"
+          echo "::set-env name=CHANGED_FILES::$(jq -r '.pull_request.changed_files' $GITHUB_EVENT_PATH)"
 
       - name: Extract new folder names
         run: |
-          additions=$(echo "${{ steps.pr.outputs.files }}" | jq '.additions')
-          changed_files=$(echo "${{ steps.pr.outputs.files }}" | jq -r '.changed_files')
+          additions="${{ env.ADDITIONS }}"
+          changed_files="${{ env.CHANGED_FILES }}"
           for file in $changed_files; do
             if [ $(echo $file | grep '/' | wc -l) -eq 1 ]; then
               dirname=$(dirname $file)
@@ -32,9 +28,4 @@ jobs:
               fi
             fi
           done
-
-      - name: Get PR details
-        id: end
-        run: |
-          echo "Hello World"
   
