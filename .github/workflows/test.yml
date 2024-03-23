@@ -10,13 +10,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Get PR details
+        id: pr
+        run: |
+          echo "::set-env name=ADDITIONS::$(jq -r '.pull_request.additions' $GITHUB_EVENT_PATH)"
+          echo "::set-env name=CHANGED_FILES::$(jq -r '.pull_request.changed_files' $GITHUB_EVENT_PATH)"
+
       - name: Extract new folder names
         run: |
-          changed_files=$(jq -r '.pull_request.changed_files' $GITHUB_EVENT_PATH)
+          additions="${{ env.ADDITIONS }}"
+          changed_files="${{ env.CHANGED_FILES }}"
           for file in $changed_files; do
-            if [[ $file =~ ^(.+)/[^/]+$ ]]; then
-              dirname=${BASH_REMATCH[1]}
-              echo "New folder added: $dirname"
+            echo $file
+            if [ $(echo $file | grep '/' | wc -l) -eq 1 ]; then
+              dirname=$(dirname $file)
+              if ! echo "$additions" | grep -q "^$dirname\$"; then
+                echo "New folder added: $dirname"
+              else 
+                echo "Folder already added: $dirname"
+              fi
             fi
           done
-  
