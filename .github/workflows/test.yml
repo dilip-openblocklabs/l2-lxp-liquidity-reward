@@ -31,5 +31,6 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Run command from t1 folder
         run: |
-          cd $FOLDER_NAME
+          cd adapters | cd $FOLDER_NAME
           # Run your command here
+          ls
