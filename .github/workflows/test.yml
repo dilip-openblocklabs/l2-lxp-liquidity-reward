@@ -8,6 +8,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      FOLDER_NAME: ""
     steps:
       - uses: actions/checkout@v2.1.0
       - uses: jitterbit/get-changed-files@v1
@@ -19,7 +21,7 @@ jobs:
         run: |
           added="${{ steps.abc.outputs.added }}"
           folder=$(echo "$added" | awk -F/ '{print $1}' | sort -u)
-          echo "::set-env name=FOLDER_NAME::$folder"
+          echo "FOLDER_NAME=$folder" >> $GITHUB_ENV
       - name: Print folder name
         run: |
           echo "Folder name: $FOLDER_NAME"
