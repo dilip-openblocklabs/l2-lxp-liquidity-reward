@@ -6,16 +6,26 @@ on:
       - '**/'  # Listen for changes in any directory
 
 jobs:
-  print_new_folder_name:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.1.0
+      - uses: jitterbit/get-changed-files@v1
+        id: abc
         with:
-          fetch-depth: 0
-      - name: (CI) Dependencies update check
+          format: space-delimited
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Printing
         run: |
-          current_commit=`git log -n 1 --pretty=format:%H`
-          echo $current_commit
-          last_deps_mod_commit=`git log -n 1 --pretty=format:%H -- composer.json`
-          echo $last_deps_mod_commit
-          if [ $current_commit == $last_deps_mod_commit ]; then echo USE_LOCK=0 > ci.conf; else echo USE_LOCK=1 > ci.conf; fi
+          echo "All:"
+          echo "${{ steps.abc.outputs.all }}"
+          echo "Added:"
+          echo "${{ steps.abc.outputs.added }}"
+          echo "Removed:"
+          echo "${{ steps.abc.outputs.removed }}"
+          echo "Renamed:"
+          echo "${{ steps.abc.outputs.renamed }}"
+          echo "Modified:"
+          echo "${{ steps.abc.outputs.modified }}"
+          echo "Added+Modified:"
+          echo "${{ steps.abc.outputs.added_modified }}"
