@@ -12,19 +12,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Print Event Payload
-        run: cat $GITHUB_EVENT_PATH
-
-      - name: Get PR details
-        id: pr
-        run: |
-          echo "ADDITIONS=$(jq -r '.pull_request.additions' $GITHUB_EVENT_PATH)" >> $GITHUB_ENV
-          echo "CHANGED_FILES=$(jq -r '.pull_request.changed_files' $GITHUB_EVENT_PATH)" >> $GITHUB_ENV
-
       - name: Extract new folder names
         run: |
-          additions="${{ env.ADDITIONS }}"
-          changed_files="${{ env.CHANGED_FILES }}"
+          additions=$(jq -r '.pull_request.additions' $GITHUB_EVENT_PATH)
+          changed_files=$(jq -r '.pull_request.changed_files' $GITHUB_EVENT_PATH)
+
           for file in $changed_files; do
             if [ $(echo $file | grep '/' | wc -l) -eq 1 ]; then
               dirname=$(dirname $file)
