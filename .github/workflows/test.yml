@@ -12,6 +12,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Print Event Payload
+        run: cat $GITHUB_EVENT_PATH
+
       - name: Get PR details
         id: pr
         run: |
