@@ -36,4 +36,4 @@ jobs:
           # Run your command here
           npm run compile
           cd ..
-          npm run test
+          npm run test $FOLDER_NAME
