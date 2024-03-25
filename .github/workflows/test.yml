@@ -14,14 +14,11 @@ jobs:
 
       - name: Extract new folder names
         run: |
-          additions=$(jq -r '.pull_request.additions' $GITHUB_EVENT_PATH)
           changed_files=$(jq -r '.pull_request.changed_files' $GITHUB_EVENT_PATH)
 
           for file in $changed_files; do
-            if [ $(echo $file | grep '/' | wc -l) -eq 1 ]; then
-              dirname=$(dirname $file)
-              if ! echo "$additions" | grep -q "^$dirname\$"; then
-                echo "New folder added: $dirname"
-              fi
+            if [[ $file == */* ]]; then
+              dirname=$(dirname "$file")
+              echo "New folder added: $dirname"
             fi
           done
