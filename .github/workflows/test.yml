@@ -1,33 +1,20 @@
-name: Test-PRs
+name: Print Pull Request Changes
+
 on:
   pull_request:
     paths:
-      - '**/' 
+      - '**/'  # Listen for changes in any directory
+
 jobs:
-  print_new_folder_name:
+  print_pull_request_changes:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Get PR details
-        id: pr
+      - name: Print Added Files
         run: |
-          echo "::set-env name=ADDITIONS::$(jq -r '.pull_request.additions' $GITHUB_EVENT_PATH)"
-          echo "::set-env name=CHANGED_FILES::$(jq -r '.pull_request.changed_files' $GITHUB_EVENT_PATH)"
-
-      - name: Extract new folder names
-        run: |
-          additions="${{ env.ADDITIONS }}"
-          changed_files="${{ env.CHANGED_FILES }}"
-          for file in $changed_files; do
-            echo $file
-            if [ $(echo $file | grep '/' | wc -l) -eq 1 ]; then
-              dirname=$(dirname $file)
-              if ! echo "$additions" | grep -q "^$dirname\$"; then
-                echo "New folder added: $dirname"
-              else 
-                echo "Folder already added: $dirname"
-              fi
-            fi
+          git fetch origin $GITHUB_BASE_REF:$GITHUB_BASE_REF
+          git diff --name-only $GITHUB_BASE_REF...HEAD | grep '^+' | sed 's/^+//' | while read filename; do
+            echo "Added: $filename"
           done
