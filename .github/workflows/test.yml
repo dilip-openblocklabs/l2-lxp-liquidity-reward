@@ -12,6 +12,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Print changed files
+        run: |
+          changed_files=$(jq -r '.pull_request.changed_files' $GITHUB_EVENT_PATH)
+          echo "Changed files: $changed_files"
+
       - name: Extract new folder names
         run: |
           changed_files=$(jq -r '.pull_request.changed_files' $GITHUB_EVENT_PATH)
