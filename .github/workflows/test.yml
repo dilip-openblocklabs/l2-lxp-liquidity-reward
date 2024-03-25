@@ -15,16 +15,11 @@ jobs:
         with:
           format: space-delimited
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract folder names
+      - name: Extract folder name
         run: |
-          echo "Added:"
-          echo "${{ steps.abc.outputs.added }}" | awk -F/ '{print $1}' | sort -u > folders.txt
-      - name: Checkout PR
-        uses: actions/checkout@v2.1.0
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - name: Run script from t1 folder
+          added="${{ steps.abc.outputs.added }}"
+          folder=$(echo "$added" | awk -F/ '{print $1}' | sort -u)
+          echo "::set-env name=FOLDER_NAME::$folder"
+      - name: Print folder name
         run: |
-          cd $(head -n 1 folders.txt)
-          # Run your script here
-          ls
+          echo "Folder name: $FOLDER_NAME"
