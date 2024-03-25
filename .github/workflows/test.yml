@@ -14,7 +14,7 @@ jobs:
 
       - name: Print Added Files
         run: |
-          git fetch origin $GITHUB_BASE_REF:$GITHUB_BASE_REF
-          git diff --name-only $GITHUB_BASE_REF...HEAD | grep '^+' | sed 's/^+//' | while read filename; do
+          git fetch origin main:main
+          git diff --name-only main...HEAD | grep '^+' | sed 's/^+//' | while read filename; do
             echo "Added: $filename"
           done
