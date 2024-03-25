@@ -34,6 +34,7 @@ jobs:
           cd adapters 
           cd $FOLDER_NAME
           # Run your command here
+          npm install
           npm run compile
           cd ..
           npm run test $FOLDER_NAME
