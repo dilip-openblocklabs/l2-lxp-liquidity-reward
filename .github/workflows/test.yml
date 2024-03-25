@@ -25,3 +25,11 @@ jobs:
       - name: Print folder name
         run: |
           echo "Folder name: $FOLDER_NAME"
+      - name: Checkout PR
+        uses: actions/checkout@v2.1.0
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Run command from t1 folder
+        run: |
+          cd $FOLDER_NAME
+          # Run your command here
