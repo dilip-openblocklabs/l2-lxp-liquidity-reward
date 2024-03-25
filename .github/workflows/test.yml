@@ -20,7 +20,7 @@ jobs:
       - name: Extract folder name
         run: |
           added="${{ steps.abc.outputs.added }}"
-          folder=$(echo "$added" | awk -F/ '{print $1}' | sort -u)
+          folder=$(echo "$added" | awk -F/ '{print $2}' | sort -u)
           echo "FOLDER_NAME=$folder" >> $GITHUB_ENV
       - name: Print folder name
         run: |
