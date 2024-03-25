@@ -12,14 +12,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Print changed files
-        run: |
-          changed_files=$(jq -r '.pull_request.changed_files' $GITHUB_EVENT_PATH)
-          echo "Changed files: $changed_files"
+      - name: Print pull request payload
+        run: cat $GITHUB_EVENT_PATH
 
       - name: Extract new folder names
         run: |
-          changed_files=$(jq -r '.pull_request.changed_files' $GITHUB_EVENT_PATH)
+          changed_files=$(jq -r '.pull_request | .files[] | select(.status == "added" or .status == "modified") | .filename' $GITHUB_EVENT_PATH)
 
           for file in $changed_files; do
             if [[ $file == */* ]]; then
