@@ -40,6 +40,14 @@ jobs:
           npm install
           npm run start $FOLDER_NAME
 
+       # Verify if CSV file exists
+      - name: Check if CSV file exists
+        run: |
+          if [ ! -f $FOLDER_NAME/output.csv ]; then
+            echo "Error: CSV file does not exist"
+            exit 1
+          fi
+
 
       - name: Upload to S3
         uses: aws-actions/configure-aws-credentials@v1
@@ -50,3 +58,5 @@ jobs:
           
       - name: Upload to S3
         run: aws s3 cp $FOLDER_NAME/outputData.csv s3://linea-files/public/ --acl public-read
+        env:
+          AWS_DEFAULT_REGION: us-east-1
