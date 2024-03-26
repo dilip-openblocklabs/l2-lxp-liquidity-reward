@@ -43,7 +43,7 @@ jobs:
        # Verify if CSV file exists
       - name: Check if CSV file exists
         run: |
-          if [ ! -f $FOLDER_NAME/output.csv ]; then
+          if [ ! -f $FOLDER_NAME/outputData.csv ]; then
             echo "Error: CSV file does not exist"
             exit 1
           fi
