@@ -73,7 +73,7 @@ readBlocksFromCSV('block_numbers.tsv')
 
       // Write to file when batch size is reached or at the end of loop
       if (i % batchSize === 0 || i === blocks.length) {
-        const ws = fs.createWriteStream(`${folderName}/outputData.csv`, { flags: i === batchSize ? 'w' : 'a' });
+        const ws = fs.createWriteStream(`outputData.csv`, { flags: i === batchSize ? 'w' : 'a' });
         write(allCsvRows, { headers: i === batchSize ? true : false })
           .pipe(ws)
           .on("finish", () => {
