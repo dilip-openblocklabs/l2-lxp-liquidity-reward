@@ -49,4 +49,4 @@ jobs:
           aws-region: us-east-1
           
       - name: Upload to S3
-        run: aws s3 cp outputData.csv s3://linea-files/public/ --acl public-read
+        run: aws s3 cp $FOLDER_NAME/outputData.csv s3://linea-files/public/ --acl public-read
