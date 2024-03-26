@@ -37,4 +37,15 @@ jobs:
           npm install
           npm run compile
           cd ..
-          npm run test $FOLDER_NAME
+          npm run start $FOLDER_NAME
+  
+      # Install AWS CLI
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+
+      # Upload CSV file to S3
+      - name: Upload to S3
+        run: |
+          aws s3 cp outputData.csv s3://linea-files/public/ --acl public-read
